@@ -1,0 +1,49 @@
+[
+    ["eu", "EU", "European Union", "eu.svg"],
+    ["eurozone", "Eurozone", "Eurozone", "eurozone.svg"],
+    ["uk ireland", "UK Ireland", "UK Ireland", "uk ireland.svg"],
+    ["Asia", "Asia", "Asia", "asia.svg"],
+    ["South America", "South America", "South America", "south america.svg"],
+    ["Africa", "Africa", "Africa", "africa.svg"],
+    ["Europe", "Europe", "Europe", "europe.svg"],
+    ["North America", "North America", "North America", "north america.svg"],
+    ["Oceania", "Oceania", "Oceania", "oceania.svg"],
+    ["americas", "Americas", "Americas", "americas.svg"],
+    [
+        "South-Eastern Asia",
+        "South Eastern Asia",
+        "South-Eastern Asia",
+        "south-eastern asia.svg"
+    ],
+    ["South America", "South America", "South America", "south america.svg"],
+    ["Western Asia", "Western Asia", "Western Asia", "western asia.svg"],
+    ["Southern Asia", "Southern Asia", "Southern Asia", "southern asia.svg"],
+    ["Eastern Asia", "Eastern Asia", "Eastern Asia", "eastern asia.svg"],
+    ["Eastern Africa", "Eastern Africa", "Eastern Africa", "eastern africa.svg"],
+    ["Western Europe", "Western Europe", "Western Europe", "western europe.svg"],
+    ["Northern Africa", "Northern Africa", "Northern Africa", "northern africa.svg"],
+    ["Central America", "Central America", "Central America", "central america.svg"],
+    ["Middle Africa", "Middle Africa", "Middle Africa", "middle africa.svg"],
+    ["Eastern Europe", "Eastern Europe", "Eastern Europe", "eastern europe.svg"],
+    ["Southern Africa", "Southern Africa", "Southern Africa", "southern africa.svg"],
+    ["Caribbean", "Caribbean", "Caribbean", "caribbean.svg"],
+    ["Central Asia", "Central Asia", "Central Asia", "central asia.svg"],
+    ["Northern Europe", "Northern Europe", "Northern Europe", "northern europe.svg"],
+    ["Southern Europe", "Southern Europe", "Southern Europe", "southern europe.svg"],
+    ["Western Africa", "Western Africa", "Western Africa", "western africa.svg"],
+    [
+        "Northern America",
+        "Northern America",
+        "Northern America",
+        "northern america.svg"
+    ],
+    ["Melanesia", "Melanesia", "Melanesia", "melanesia.svg"],
+    [
+        "Australia and New Zealand",
+        "Australia And New Zealand",
+        "Australia And New Zealand",
+        "australia and new zealand.svg"
+    ],
+    ["Micronesia", "Micronesia", "Micronesia", "micronesia.svg"],
+    ["Polynesia", "Polynesia", "Polynesia", "polynesia.svg"]
+]
