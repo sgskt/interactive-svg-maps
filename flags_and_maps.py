@@ -1,3 +1,10 @@
+"""
+
+
+
+"""
+
+
 from pyogrio import read_dataframe
 from shapely.affinity import translate, scale
 from shapely.validation import make_valid
@@ -61,6 +68,13 @@ def to_svg(shape, **kwargs):
 
 
 def write_svg(shape, file):
+    """
+    Write the SVG representation of a shape to a file.
+
+    Parameters:
+    - shape (Shapely object): The geometric shape to convert to SVG.
+    - file (str): The path to the file where the SVG will be written.
+    """
     with open(file, "w") as f:
         svg = to_svg(shape)
         svg = re.sub('stroke-width="[\d\.]+"', 'stroke-width="0.25"', svg)
@@ -88,6 +102,15 @@ def remove_small_polygons(shape, cutoff=0.5):
 
 
 def export_gpd_to_svg(df, path, simplify=True):
+    """
+    Export a GeoDataFrame to an SVG file.
+
+    Parameters:
+    - df (GeoDataFrame): The GeoDataFrame containing the geometries to export.
+    - path (str): The path to the SVG file where data will be written.
+    - simplify (bool, optional): Whether to simplify the shapes. Defaults to True.
+    """
+
     num_shapes = df.shape[0]
     # Scale and translate will only work with native Shapely objects
     geom = GeometryCollection(df.geometry.to_list())
@@ -116,6 +139,13 @@ def group_and_export_by(df, group_col, detail_level_col, simplify=True):
 
 
 def export_individual_country(df, name_column):
+    """
+    Export each individual country in a DataFrame to a separate SVG file.
+
+    Parameters:
+    - df (DataFrame): The DataFrame containing country data.
+    - name_column (str): The column containing country ISO codes.
+    """
     for iso in tqdm(df[name_column].unique()):
         df_iso = df[df[name_column] == iso]
         if iso == "GL":
@@ -126,6 +156,15 @@ def export_individual_country(df, name_column):
 
 
 def export_aggregated_countries(df, name_column, iso_dic):
+    """
+    Export aggregated country data to an SVG file.
+
+    Parameters:
+    - df (DataFrame): The DataFrame containing country data.
+    - name_column (str): The column containing country ISO codes.
+    - iso_dic (dict): Dictionary containing the ISO codes of the aggregated countries.
+    """
+
     if iso_dic["name"] != "World":
         df_iso = df[df[name_column].isin(iso_dic["iso_codes"])]
     else:
@@ -137,11 +176,32 @@ def export_aggregated_countries(df, name_column, iso_dic):
 
 
 def apply_custom_crs(df, degree=-210):
+    """
+    Apply a custom coordinate reference system (CRS) to a DataFrame so that
+    a country will not be splitted in half at the edge of the map.
+
+    Parameters:
+    - df (GeoDataFrame): The DataFrame to apply the CRS to.
+    - degree (int, optional): The degree of rotation. Defaults to -210.
+
+    Returns:
+    - GeoDataFrame: The transformed DataFrame.
+    """
     custom_mercator = f"+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0={degree} +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"
     return df.to_crs(custom_mercator)
 
 
 def change_crs(df, aggregation):
+    """
+    Change the CRS of a DataFrame based on aggregation details.
+
+    Parameters:
+    - df (GeoDataFrame): The DataFrame to change the CRS for.
+    - aggregation (dict): Dictionary containing aggregation details.
+
+    Returns:
+    - GeoDataFrame: The transformed DataFrame.
+    """
     if "america" in aggregation["name"].lower().strip():
         return apply_custom_crs(df, -10)
     return apply_custom_crs(df)
@@ -164,23 +224,41 @@ def get_iso_col(df):
 
 
 def fill_missing_iso_code(df):
+    """
+    Fill missing iso codes for admin level 1 data
+    """
     if is_admin_1_data(df):
         df.at[44, "iso_a2"] = "SO"
         df.at[1626, "iso_a2"] = "CY"
 
 
 def filter_out_irrelevant_type(df):
+    """
+    Filter out missing iso codes and territory types only representing small islands
+    """
     if is_admin_1_data(df):
         return df[~((df.iso_a2 == "-1") | df.type_en.isin(["Overseas department"]))]
     return df[~((df.ISO_A2_EH == "-99") | df.TYPE.isin(["Dependency", "Lease"]))]
 
 
 def keep_only_iso_codes_of_admin_0(df, name_column):
+    """
+    Filter out ISO codes which are not present in mapList.json.
+
+    Only concerns small islands present in admin 1 dataset.
+    """
     admin_0_iso_codes = pd.read_json("mapList.json").iloc[:, 0].unique()
     return df[df[name_column].isin(admin_0_iso_codes)]
 
 
 def export_aggregation(countries, name_column):
+    """
+    Export aggregated country data based on predefined aggregations.
+
+    Parameters:
+    - countries (GeoDataFrame): The DataFrame containing country data.
+    - name_column (str): The column containing country names or ISO codes.
+    """
     for aggregation in tqdm(aggregations.aggregations):
         countries_adapted_crs = change_crs(countries, aggregation)
         export_aggregated_countries(countries_adapted_crs, name_column, aggregation)
