@@ -148,10 +148,7 @@ def export_individual_country(df, name_column):
     """
     for iso in tqdm(df[name_column].unique()):
         df_iso = df[df[name_column] == iso]
-        if iso == "GL":
-            df_iso = apply_custom_crs(df_iso, degree=0)
-        else:
-            df_iso = apply_custom_crs(df_iso)
+        df_iso = change_crs(df_iso, iso)
         export_gpd_to_svg(df_iso, f"./data/output_data/level_1/countries/{iso}.svg")
 
 
@@ -178,7 +175,7 @@ def export_aggregated_countries(df, name_column, iso_dic):
 def apply_custom_crs(df, degree=-210):
     """
     Apply a custom coordinate reference system (CRS) to a DataFrame so that
-    a country will not be splitted in half at the edge of the map.
+    no countries are split in half at the edge of the map.
 
     Parameters:
     - df (GeoDataFrame): The DataFrame to apply the CRS to.
@@ -191,9 +188,9 @@ def apply_custom_crs(df, degree=-210):
     return df.to_crs(custom_mercator)
 
 
-def change_crs(df, aggregation):
+def change_crs(df, country_or_agg_name: str):
     """
-    Change the CRS of a DataFrame based on aggregation details.
+    Change the CRS of a DataFrame based on country name or iso code.
 
     Parameters:
     - df (GeoDataFrame): The DataFrame to change the CRS for.
@@ -202,8 +199,10 @@ def change_crs(df, aggregation):
     Returns:
     - GeoDataFrame: The transformed DataFrame.
     """
-    if "america" in aggregation["name"].lower().strip():
+    if "america" in country_or_agg_name.lower().strip():
         return apply_custom_crs(df, -10)
+    if "gl" in country_or_agg_name.lower().strip():
+        return apply_custom_crs(df, 0)
     return apply_custom_crs(df)
 
 
@@ -260,7 +259,7 @@ def export_aggregation(countries, name_column):
     - name_column (str): The column containing country names or ISO codes.
     """
     for aggregation in tqdm(aggregations.aggregations):
-        countries_adapted_crs = change_crs(countries, aggregation)
+        countries_adapted_crs = change_crs(countries, aggregation["name"])
         export_aggregated_countries(countries_adapted_crs, name_column, aggregation)
 
 
