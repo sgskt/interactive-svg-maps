@@ -1,16 +1,15 @@
 """
+This script generates SVG maps for individual countries and aggregations from Natural Earth data.
 
-
+Aggregations are defined in aggregations.py.
 
 """
 
 
 from pyogrio import read_dataframe
 from shapely.affinity import translate, scale
-from shapely.validation import make_valid
 from shapely.geometry import GeometryCollection, MultiPolygon
 import re
-import geopandas as gpd
 import topojson as tp
 from tqdm import tqdm
 import aggregations
